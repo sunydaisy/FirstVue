@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: "Login",
   data() {
@@ -49,7 +50,16 @@ export default {
     };
   },
   methods: {
+    jumpPage(msg,loginThis){
+      loginThis.$router.push({
+            name: "FirstPage",
+            params: {
+              userName: this.userName+msg
+         }   
+      });
+    },
     login() {
+      let loginThis = this;
       if (!this.userName) {
         this.userNameErrMsg = "账号不能为空";
         return false;
@@ -58,14 +68,14 @@ export default {
         this.pwdErrMsg = "密码不能为空";
         return false;
       }
-      if (this.password == "123456") {
-        this.$router.push({
-          name: "FirstPage",
-          params: {
-            userName: this.userName
-          }
-        });
-      }
+      axios.post('http://112.74.174.102:88/api/first/login',{
+        userName : this.userName,
+        passWord : this.password
+      }).then(function(data){
+          loginThis.$options.methods.jumpPage(data,loginThis);
+      }).catch(function(error){
+          loginThis.$options.methods.jumpPage(error,loginThis);
+      });
     },
     clearError() {
       this.userNameErrMsg = "";
