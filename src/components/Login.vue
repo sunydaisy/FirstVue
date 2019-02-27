@@ -54,7 +54,7 @@ export default {
       loginThis.$router.push({
             name: "FirstPage",
             params: {
-              userName: this.userName+msg
+              userName: loginThis.userName+msg.data
          }   
       });
     },
